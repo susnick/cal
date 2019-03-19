@@ -1,9 +1,16 @@
 #include <stdio.h>
 #include <time.h>
+#include <windows.h>
 
-#define KNRM "\x1B[0m"
-#define KRED "\x1B[31m"
-#define KGRN "\x1B[32m"
+
+#define true 1
+#define false 0
+#define KNRM  "\x1B[0m"
+#define KRED  "\x1B[31;1;4m"
+#define KGRN  "\x1B[32m"
+#define KREDU "\x1B[31;1;4m"
+
+int enable_vt_mode();
 
 int main()
 {
@@ -20,13 +27,15 @@ int main()
 	int month[] = {31, february_days, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 	days_in_month = month[tm.tm_mon];
 
-
-	//struct tm first = {0, 0, 0,  1, tm.tm_mon, tm.tm_year};
-	//mktime(&first);
-
-//	printf("First day of month falls on: %d\n",first.tm_wday);
-//	printf("Current day is : %d\n", tm.tm_mday);
-    printf("%s Mo Tu We Th Fr Sa Su%s\n", KRED, KNRM);
+	//enable colors in cmd.exe
+	
+	if (enable_vt_mode() == 0)
+	{
+		printf("Unable to enter VT processing mode\n");
+		return -1;
+	}
+	
+    printf("%s Mo Tu We Th Fr Sa Su%s\n", KREDU, KNRM);
 
 	for (x = 1; x < tm.tm_wday;x++)
 	{
@@ -52,4 +61,30 @@ int main()
 
     }
     return 0;
+}
+
+int enable_vt_mode()
+{
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	if (hOut == INVALID_HANDLE_VALUE)
+	{
+		printf("Error - %d\n", GetLastError());
+		return false;
+	}
+	DWORD dwMode = 0;
+	int gotconsolemode = GetConsoleMode(hOut, &dwMode);
+
+	if (!gotconsolemode)
+	{
+		printf("Error - %d", GetLastError());
+		return false;
+	}
+	dwMode |= 0x0004;
+	if (!SetConsoleMode(hOut, dwMode))
+	{
+		printf("Error - %d", GetLastError());
+		return false;
+	}
+	return true;
 }
