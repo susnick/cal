@@ -25,6 +25,7 @@ int main()
     int i, x;
 	int february_days = ((year % 400) == 0 || ((year % 100) != 0 && (year % 4) == 0)) ? 29 : 28;
 	int month[] = {31, february_days, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	char* monthname[] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 	days_in_month = month[tm.tm_mon];
 
 	//enable colors in cmd.exe
@@ -35,6 +36,7 @@ int main()
 		return -1;
 	}
 	
+	printf("    %s - %d\n", monthname[tm.tm_mon], year);
     printf("%s Mo Tu We Th Fr Sa Su%s\n", KREDU, KNRM);
 
 	for (x = 1; x < tm.tm_wday;x++)
