@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <time.h>
+#ifdef _WIN32
 #include <windows.h>
-
+#endif
 
 #define true 1
 #define false 0
@@ -29,12 +30,13 @@ int main()
 	days_in_month = month[tm.tm_mon];
 
 	//enable colors in cmd.exe
-	
+#ifdef _WIN32
 	if (enable_vt_mode() == 0)
 	{
 		printf("Unable to enter VT processing mode\n");
 		return -1;
 	}
+#endif
 	
 	printf("    %s - %d\n", monthname[tm.tm_mon], year);
     printf("%s Mo Tu We Th Fr Sa Su%s\n", KREDU, KNRM);
@@ -62,9 +64,11 @@ int main()
 
 
     }
+	printf("\n");
     return 0;
 }
 
+#ifdef _WIN32
 int enable_vt_mode()
 {
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -90,3 +94,4 @@ int enable_vt_mode()
 	}
 	return true;
 }
+#endif
