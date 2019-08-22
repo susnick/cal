@@ -13,4 +13,12 @@ rm cal.obj
 
 
 :finish
-move cal.exe %CMDER_ROOT%\bin
+IF NOT EXIST %cd%\bin\NUL GOTO NOWINDIR
+goto movefile
+
+
+:NOWINDIR
+mkdir bin
+
+:movefile
+move cal.exe %cd%\bin
