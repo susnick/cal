@@ -1,15 +1,15 @@
 @echo off
 
-REM :runcl
-REM WHERE cl>nul 2>nul
-REM IF %ERRORLEVEL% NEQ 0 goto rungcc
-REM cl cal.c
-REM rm cal.obj
-REM goto finish
+:runcl
+WHERE cl>nul 2>nul
+IF %ERRORLEVEL% NEQ 0 goto rungcc
+cl cal.c
+rm cal.obj
+goto finish
 
 :rungcc
-::WHERE gcc>nul 2>nul
-::IF %ERRORLEVEL% NEQ 0 goto downloadtools
+WHERE gcc>nul 2>nul
+IF %ERRORLEVEL% NEQ 0 goto downloadtools
 %cd%\gcc cal.c -ocal
 goto finish
 
